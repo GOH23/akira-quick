@@ -1,13 +1,12 @@
 "use client"
-import { AbstractMesh, AssetContainer, CreateGround, DirectionalLight, Engine, FlyCamera, HemisphericLight, LoadAssetContainerAsync, Mesh, RegisterSceneLoaderPlugin, Scene, ShadowGenerator, Vector3 } from "@babylonjs/core";
-import { RefObject, useEffect, useRef, useState } from "react"
-import { BpmxLoader, GetMmdWasmInstance, MmdStandardMaterialBuilder, MmdWasmInstanceTypeMPD, MmdWasmModel, MmdWasmRuntime, SdefInjector } from "babylon-mmd"
+import { CreateGround, DirectionalLight, Engine, FlyCamera, HemisphericLight, RegisterSceneLoaderPlugin, Scene, ShadowGenerator, Vector3 } from "@babylonjs/core";
+import { useEffect, useRef, useState } from "react"
+import { BpmxLoader, GetMmdWasmInstance, MmdStandardMaterialBuilder, MmdWasmInstanceTypeMPD, MmdWasmRuntime, SdefInjector } from "babylon-mmd"
 import "babylon-mmd/esm/Loader/Optimized/bpmxLoader";
-import { MotionModel } from "../logic/MotionModel";
 export default function MMDScene({ loadModel }: { loadModel: (modelScene: Scene, mmdRuntime: MmdWasmRuntime, materialBuilder: MmdStandardMaterialBuilder) => void }) {
     const canvasRef = useRef<HTMLCanvasElement>(null)
 
-    const [debugMode, setDebugMode] = useState(false)
+    const [debugMode] = useState(false)
 
 
     useEffect(() => {

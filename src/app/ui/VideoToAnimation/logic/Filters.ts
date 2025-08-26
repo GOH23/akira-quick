@@ -1,4 +1,4 @@
-import { Nullable, Vector3} from "@babylonjs/core";
+import { Nullable, Vector3 } from "@babylonjs/core";
 import { NormalizedLandmark } from "@mediapipe/tasks-vision";
 import KalmanFilter from "kalmanjs";
 
@@ -15,16 +15,16 @@ export interface FilterParams {
 
 // 1D Gaussian Kernel
 export const gaussianKernel1d = (function () {
-    let sqr2pi = Math.sqrt(2 * Math.PI);
+    const sqr2pi = Math.sqrt(2 * Math.PI);
 
-    return function gaussianKernel1d (size: number, sigma: number) {
+    return function gaussianKernel1d(size: number, sigma: number) {
         // ensure size is even and prepare variables
-        let width = (size / 2) | 0,
+        const width = (size / 2) | 0,
             kernel = new Array(width * 2 + 1),
             norm = 1.0 / (sqr2pi * sigma),
-            coefficient = 2 * sigma * sigma,
-            total = 0,
-            x;
+            coefficient = 2 * sigma * sigma;
+        let total = 0;
+        let x
 
         // set values and increment total
         for (x = -width; x <= width; x++) {
@@ -92,9 +92,9 @@ export class KalmanVectorFilter {
         public R = 0.1,
         public Q = 3,
     ) {
-        this.kalmanFilterX = new KalmanFilter({Q: Q, R: R});
-        this.kalmanFilterY = new KalmanFilter({Q: Q, R: R});
-        this.kalmanFilterZ = new KalmanFilter({Q: Q, R: R});
+        this.kalmanFilterX = new KalmanFilter({ Q: Q, R: R });
+        this.kalmanFilterY = new KalmanFilter({ Q: Q, R: R });
+        this.kalmanFilterZ = new KalmanFilter({ Q: Q, R: R });
     }
 
     public next(t: number, vec: Vector3) {
@@ -162,7 +162,7 @@ export class EuclideanHighPassFilter {
 
     constructor(
         private readonly threshold: number
-    ) {}
+    ) { }
 
     public update(v: Vector3) {
         if (this.value.subtract(v).length() > this.threshold) {

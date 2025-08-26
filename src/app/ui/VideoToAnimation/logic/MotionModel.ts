@@ -1,13 +1,11 @@
-import { Engine, Matrix, Quaternion, Space, Vector3, VideoRecorder } from "@babylonjs/core";
-import { HolisticLandmarkerResult, Landmark, NormalizedLandmark } from "@mediapipe/tasks-vision";
-import { MmdModel, MmdWasmModel, VmdLoader } from "babylon-mmd";
+import { Matrix, Quaternion, Space, Vector3 } from "@babylonjs/core";
+import { HolisticLandmarkerResult, NormalizedLandmark } from "@mediapipe/tasks-vision";
+import { MmdWasmModel } from "babylon-mmd";
 import { IMmdRuntimeLinkedBone } from "babylon-mmd/esm/Runtime/IMmdRuntimeLinkedBone";
 import { BoneType, faceKeypoints, handKeypoints, HUMAN_LIMITS, KeyFrameType, MMDModelBones, poseKeypoints, VideosKeyFrameType } from "./MotionTypes";
 import { KalmanVectorFilter, OneEuroVectorFilter } from "./Filters";
 import * as Kalidokit from 'kalidokit'
-import Encoding from "encoding-japanese"
 import { clamp } from "kalidokit/dist/utils/helpers";
-import { Results } from "@mediapipe/holistic";
 import { HolisticParser } from "./HolisticParser";
 
 export class MotionModel {

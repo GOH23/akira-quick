@@ -28,7 +28,7 @@ export function VideoPlayer({
             {videos[currentVideoIndex] && (
                 <video
                     ref={videoRef}
-                    src={videos[currentVideoIndex]?.fileUrl}
+                    src={videos[currentVideoIndex].fileUrl}
                     className="w-full min-w-full h-64 object-contain"
                     onTimeUpdate={handleTimeUpdate}
                     onLoadedMetadata={handleLoadedMetadata}
