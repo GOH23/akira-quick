@@ -4,6 +4,7 @@ import { KeyFrameType, MMDModelBones } from "./MotionTypes";
 import { Quaternion, Vector3 } from "@babylonjs/core";
 import { IMmdRuntimeLinkedBone } from "babylon-mmd/esm/Runtime/IMmdRuntimeLinkedBone";
 export class ExportAnimation {
+    
     static exportToVMD(_Model: MmdWasmModel, keyframes: KeyFrameType[]): Blob {
         if (!_Model || keyframes.length === 0) {
             throw new Error("Модель не инициализирована или нет кадров анимации");

@@ -11,7 +11,9 @@ import { VideoPlayer } from "./ui/VideoPlayer";
 import { ExportAnimation } from "./logic/ExportAnimation";
 import { AnimatePresence, motion } from "framer-motion";
 import { Bug, Download, Github, X } from "lucide-react";
-
+import { useTranslation } from "../../../i18n/LocaleProvider";
+import LINKS from "../../../config/links";
+import { Results } from "@mediapipe/hands"
 export type VideoType = {
     fileName: string
     fileUrl: string,
@@ -20,28 +22,26 @@ export type VideoType = {
     duration: string
 }
 export function VideoToAnimationUi() {
-    const [processedFiles, setProcessedFiles] = useState<Set<string>>(new Set())
     const [videos, setVideos] = useState<VideoType[]>([])
-
     const [currentFile, setCurrentFile] = useState(0);
     const [currentStep, setCurrentStep] = useState(0);
-    const [duration, setDuration] = useState(0);
-    const [currentTime, setCurrentTime] = useState(0);
-
-    const [isComplete, setIsComplete] = useState(false)
     const [isProcessing, setIsProcessing] = useState(false);
-    const [VideoPlaying, setIsVideoPlaying] = useState(false)
+    const [isComplete, setIsComplete] = useState(false);
+    const [currentTime, setCurrentTime] = useState(0);
+    const [duration, setDuration] = useState(0);
+    const [isVideoPlaying, setIsVideoPlaying] = useState(false);
+    
+    const tr = useTranslation();
+    const videoRef = useRef<HTMLVideoElement>(null);
+    const videoUploadRef = useRef<HTMLInputElement>(null);
+    const HolisticRef = useRef<HolisticLandmarker | null>(null);
+    const animationRef = useRef<number | null>(null);
+    const motionModelRef = useRef<MotionModel>(new MotionModel());
 
-    const videoUploadRef = useRef<HTMLInputElement>(null)
-    const videoRef = useRef<HTMLVideoElement>(null)
-    const animationRef = useRef<number>(null);
-    const HolisticRef = useRef<HolisticLandmarker>(null)
-    const motionModelRef = useRef<MotionModel>(new MotionModel())
     const closeModal = () => {
         setIsComplete(false)
         setVideos([])
         motionModelRef.current.keyframes = [];
-        
     }
     const handleFileUpload = (event: any) => {
         const files = Array.from(event.target.files);
@@ -142,6 +142,7 @@ export function VideoToAnimationUi() {
         mmdRuntime: MmdWasmRuntime,
         materialBuilder: MmdStandardMaterialBuilder
     ) => {
+
         await LoadAssetContainerAsync(
             "/model/绮良良.bpmx",
             modelScene, {
@@ -187,10 +188,18 @@ export function VideoToAnimationUi() {
 
     }
     useEffect(() => {
-        loadHolistic().then(() => {
-            console.log("Holistic loaded")
+        Promise.all([loadHolistic()]).then(() => {
+            console.log(HolisticRef.current)
+            console.log("System loaded")
         })
+        
     }, [])
+
+    const res = (result: Results) => {
+        console.log(result)
+    }
+
+
 
     useEffect(() => {
         if (!isProcessing || isComplete) return;
@@ -206,13 +215,20 @@ export function VideoToAnimationUi() {
 
                 return updatedVideos;
             });
-            if (!videoRef.current!.paused && videoRef.current!.readyState >= 2) {
-                var timestamp = performance.now()
-                HolisticRef.current?.detectForVideo(videoRef.current!, timestamp, (result) => {
-                    motionModelRef.current.motionCalculate(result, currentStep)
-                })
-            }
 
+            if (!videoRef.current!.paused && videoRef.current!.readyState >= 2) {
+                const video = videoRef.current!;
+                console.log("test")
+                try {
+                    const timestamp = performance.now();
+                    HolisticRef.current!.detectForVideo(video, timestamp, (result: any) => {
+                        motionModelRef.current.motionCalculate(result, currentStep);
+                    });
+                } catch (err) {
+                    console.error('Error showing/sending processed frame to mediapipe:', err);
+                }
+
+            }
             if (!isComplete && isProcessing) {
                 animationRef.current = requestAnimationFrame(processVideo);
             }
@@ -228,21 +244,28 @@ export function VideoToAnimationUi() {
     }, [isProcessing, isComplete, currentStep, videos.length]);
 
     return (
-        <div className="container mx-auto">
+        <div>
             <div className="backdrop-blur-xl bg-white/10 rounded-2xl border border-white/20 shadow-2xl overflow-hidden">
 
                 <div className="bg-black/20 p-6 border-b border-white/10">
-                    <h1 className="text-2xl font-bold text-white text-center">
-                        {isComplete ? 'Processing Complete!' : isProcessing ? 'Auto Processing Videos to MMD animation' : 'Video Auto Processor to MMD animation'}
-                    </h1>
-                    <p className="text-white/70 text-center mt-2">
-                        {isComplete
-                            ? 'All videos have been processed successfully'
-                            : isProcessing
-                                ? 'Videos are playing and processing automatically'
-                                : 'Upload videos for automatic processing to animation'
-                        }
-                    </p>
+                        {(() => {
+                            const tr = useTranslation()
+                            return (
+                                <>
+                                    <h1 className="text-2xl font-bold text-white text-center">
+                                        {isComplete ? tr('video.title.processing') : isProcessing ? tr('video.title.processing') : tr('video.title.idle')}
+                                    </h1>
+                                    <p className="text-white/70 text-center mt-2">
+                                        {isComplete
+                                            ? tr('video.description.processing')
+                                            : isProcessing
+                                                ? tr('video.description.processing')
+                                                : tr('video.description.idle')
+                                        }
+                                    </p>
+                                </>
+                            )
+                        })()}
                 </div>
                 <div className="p-6">
                     <div className="mb-6 flex justify-center flex-wrap">
@@ -258,7 +281,7 @@ export function VideoToAnimationUi() {
                             onClick={() => videoUploadRef.current!.click()}
                             className="px-8 cursor-pointer py-4 bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 rounded-xl text-white font-bold text-lg transition-all duration-300 hover:scale-105 shadow-lg mr-4"
                         >
-                            Select Videos
+                            {tr('button.selectVideos')}
                         </button>
 
                         {videos.length > 0 && (
@@ -266,7 +289,7 @@ export function VideoToAnimationUi() {
                                 onClick={startProcessing}
                                 className="px-8 cursor-pointer py-4 bg-gradient-to-r from-green-500 to-teal-500 hover:from-green-600 hover:to-teal-600 rounded-xl text-white font-bold text-lg transition-all duration-300 hover:scale-105 shadow-lg"
                             >
-                                Start
+                                {tr('button.start')}
                             </button>
                         )}
 
@@ -288,11 +311,11 @@ export function VideoToAnimationUi() {
                             {/* Current Video Progress */}
                             <div className="bg-white/5 rounded-xl p-4 border border-white/10">
                                 <div className="flex justify-between items-center mb-3">
-                                    <h4 className="text-white font-semibold">Current Video Processing</h4>
-                                    <span className="text-white/70 text-sm">
-                                        {currentStep + 1}/{videos.length}
-                                    </span>
-                                </div>
+                                        <h4 className="text-white font-semibold">Current Video Processing</h4>
+                                        <span className="text-white/70 text-sm">
+                                            {currentStep + 1}/{videos.length}
+                                        </span>
+                                    </div>
                                 {videos[currentStep] && (
                                     <>
                                         <p className="text-white/80 mb-4">
@@ -319,6 +342,7 @@ export function VideoToAnimationUi() {
                     </div>}
                 </div>
             </div>
+
             <AnimatePresence>
                 {isComplete && (
                     <motion.div
@@ -337,7 +361,7 @@ export function VideoToAnimationUi() {
                             onClick={(e) => e.stopPropagation()}
                         >
                             <div className="flex justify-between items-center mb-6">
-                                <h2 className="text-2xl font-bold text-white">Animation Ready!</h2>
+                                <h2 className="text-2xl font-bold text-white">{tr('modal.title')}</h2>
                                 <motion.button
                                     onClick={closeModal}
                                     className="text-gray-400 hover:text-white transition-colors"
@@ -349,13 +373,12 @@ export function VideoToAnimationUi() {
                             </div>
 
                             <p className="text-gray-300 mb-6">
-                                Your animation has been successfully generated. Before downloading,
-                                help us grow by supporting the project!
+                                {tr('modal.description')}
                             </p>
 
                             <div className="space-y-4 mb-8">
                                 <motion.a
-                                    href="https://github.com"
+                                    href={LINKS.github}
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className="flex items-center gap-4 p-4 bg-gray-700 hover:bg-gray-600 rounded-xl transition-colors"
@@ -372,7 +395,7 @@ export function VideoToAnimationUi() {
                                 </motion.a>
 
                                 <motion.a
-                                    href="https://t.me"
+                                    href={LINKS.telegram}
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className="flex items-center gap-4 p-4 bg-gray-700 hover:bg-gray-600 rounded-xl transition-colors"
@@ -391,7 +414,7 @@ export function VideoToAnimationUi() {
                                 </motion.a>
 
                                 <motion.a
-                                    href="https://github.com/issues"
+                                    href={LINKS.issues}
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className="flex items-center gap-4 p-4 bg-gray-700 hover:bg-gray-600 rounded-xl transition-colors"
@@ -408,15 +431,17 @@ export function VideoToAnimationUi() {
                                 </motion.a>
                             </div>
 
-                            <motion.button
+                                <motion.button
                                 onClick={() => {
                                     console.log(motionModelRef.current.keyframes)
-                                    motionModelRef.current.keyframes.forEach((motion, index) => {
+                                    motionModelRef.current.keyframes.forEach(async (motion, index) => {
+
                                         const vmdBlob = ExportAnimation.exportToVMD(motionModelRef.current._Model!, motion.keyFrames);
+
                                         const url = URL.createObjectURL(vmdBlob);
                                         const a = document.createElement('a');
                                         a.href = url;
-                                        a.download = `akira_animation${index}.vmd`;
+                                        a.download = `akira_quick_animation${index}.vmd`;
                                         document.body.appendChild(a);
                                         a.click();
                                         document.body.removeChild(a);
@@ -428,14 +453,14 @@ export function VideoToAnimationUi() {
                                 whileTap={{ scale: 0.98 }}
                             >
                                 <Download size={24} />
-                                Download Animations
+                                {tr('download.animations')}
                             </motion.button>
                         </motion.div>
                     </motion.div>
                 )}
             </AnimatePresence>
             <MMDDynamicScene loadModel={loadModel} />
-            {videos.length != 0 && <FileQueue currentFile={currentFile} isVideoPlaying={VideoPlaying} files={videos} />}
+            {videos.length != 0 && <FileQueue currentFile={currentFile} isVideoPlaying={isVideoPlaying} files={videos} />}
         </div>
     )
 }

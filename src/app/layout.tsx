@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 
 import "./globals.css";
 import BackgroundPattern from "./ui/BackgroundPattern";
+import { LocaleProvider } from "../i18n/LocaleProvider";
+import Script from "next/script";
 
 export const metadata: Metadata = {
   title: "Akira Quick - AI MMD Animation Generator from Video & Text",
@@ -40,11 +42,16 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
+
       <body className="bg-[#0a0a0a80] text-white min-h-screen">
-        <BackgroundPattern />
-        <div className="backdrop-blur-none transition-all duration-300 relative">
-          {children}
-        </div>
+        <Script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js" strategy="beforeInteractive" crossOrigin="anonymous"></Script>
+        <LocaleProvider>
+          <BackgroundPattern />
+          <div className="backdrop-blur-none transition-all duration-300 relative">
+            {children}
+          </div>
+        </LocaleProvider>
+
       </body>
     </html>
   );

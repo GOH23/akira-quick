@@ -6,6 +6,7 @@ const nextConfig: NextConfig = {
   eslint: {
     ignoreDuringBuilds: true
   },
+
   webpack: (config) => {
     // Handle babylon-mmd WASM files
     config.module.rules.push({
@@ -14,7 +15,9 @@ const nextConfig: NextConfig = {
     })
     // Ensure proper module resolution for .js extensions
     config.resolve.extensions = [...(config.resolve.extensions || []), ".js", ".mjs"]
-
+    config.resolve.fallback = {
+      ...config.resolve.fallback,
+    };
     return config
   },
   async headers() {

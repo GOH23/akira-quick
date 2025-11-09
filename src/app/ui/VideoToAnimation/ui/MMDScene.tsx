@@ -3,12 +3,11 @@ import { CreateGround, DirectionalLight, Engine, FlyCamera, HemisphericLight, Re
 import { useEffect, useRef, useState } from "react"
 import { BpmxLoader, GetMmdWasmInstance, MmdStandardMaterialBuilder, MmdWasmInstanceTypeMPD, MmdWasmRuntime, SdefInjector } from "babylon-mmd"
 import "babylon-mmd/esm/Loader/Optimized/bpmxLoader";
+
 export default function MMDScene({ loadModel }: { loadModel: (modelScene: Scene, mmdRuntime: MmdWasmRuntime, materialBuilder: MmdStandardMaterialBuilder) => void }) {
     const canvasRef = useRef<HTMLCanvasElement>(null)
 
-    const [debugMode] = useState(false)
-
-
+    const [debugMode] = useState(true)
     useEffect(() => {
         if (canvasRef.current) {
             RegisterSceneLoaderPlugin(new BpmxLoader())

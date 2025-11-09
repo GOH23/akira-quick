@@ -1,22 +1,27 @@
 "use client"
+
 import { motion } from 'framer-motion'
 import { Github, Mail, MessageCircle, Star, Bug } from 'lucide-react'
 import Link from 'next/link'
 import { useState } from 'react'
 import { FaTelegram } from "react-icons/fa";
+import LINKS from '../../config/links'
+import { useLocale } from '../../i18n/LocaleProvider'
+
 export default function SocialLinks() {
     const [hoveredSocial, setHoveredSocial] = useState<string | null>(null)
+    const { locale, setLocale } = useLocale()
 
     const socialLinks = [
         {
             name: 'Telegram',
-            url: 'https://t.me/yourusername',
+            url: LINKS.telegram,
             icon: FaTelegram,
             highlight: true
         },
         {
             name: 'Start Repository',
-            url: 'https://github.com/yourusername/your-repo',
+            url: LINKS.github,
             icon: Star,
             highlight: true
         },
@@ -27,8 +32,8 @@ export default function SocialLinks() {
             highlight: true
         },
         {
-            name: 'GitHub',
-            url: 'https://github.com/yourusername',
+            name: 'Issues',
+            url: LINKS.issues,
             icon: Github
         },
     ]
@@ -42,8 +47,24 @@ export default function SocialLinks() {
         >
             {/* Название Akira Quick - всегда видно */}
             <div className="text-white font-bold text-lg bg-gradient-to-r from-blue-500 to-purple-600 
-                    px-4 py-2 rounded-xl shadow-lg">
-                Akira Quick
+                    px-4 py-2 rounded-xl shadow-lg flex items-center gap-3">
+                <div>Akira Quick</div>
+                <div className="flex items-center gap-2">
+                    <div className="inline-flex rounded-lg overflow-hidden bg-white/5">
+                        <button
+                            onClick={() => setLocale('en')}
+                            className={`px-3 py-1 text-sm font-medium transition-colors ${locale === 'en' ? 'bg-white/20 text-white' : 'text-white/70 hover:bg-white/10'}`}
+                        >
+                            EN
+                        </button>
+                        <button
+                            onClick={() => setLocale('ru')}
+                            className={`px-3 py-1 text-sm font-medium transition-colors ${locale === 'ru' ? 'bg-white/20 text-white' : 'text-white/70 hover:bg-white/10'}`}
+                        >
+                            RU
+                        </button>
+                    </div>
+                </div>
             </div>
 
             {/* Социальные иконки */}

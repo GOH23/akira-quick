@@ -1,0 +1,37 @@
+{
+  "tabs.videoToAnimation": "Video → Animation",
+  "tabs.textToAnimation": "Text → Animation",
+  "tabs.textToPose": "Text → Pose",
+  "video.title.processing": "Automatic video processing to MMD animation",
+  "video.title.idle": "Video Processor → MMD Animation",
+  "video.description.processing": "Videos are playing and processing automatically",
+  "video.description.idle": "Upload videos for automatic processing to animation",
+  "button.selectVideos": "Select Videos",
+  "button.start": "Start",
+  "download.animations": "Download Animations",
+  "modal.title": "Animation Ready!",
+  "modal.description": "Your animation has been successfully generated. Before downloading, support the project!"
+  ,"think.header": "thinking..."
+  ,"think.hide": "Hide"
+  ,"think.show": "Show"
+    ,"textToPose.title": "Text to MMD Pose Generator"
+    ,"textToPose.placeholder": "Describe the pose you want to generate... Example: A character standing in a confident pose with hands on hips"
+    ,"button.generate": "Generate Pose"
+    ,"button.generating": "Generating..."
+    ,"status.loadingModel": "Loading model..."
+    ,"status.modelReady": "ready"
+    ,"status.modelLoading": "loading"
+    ,"result.heading": "Generated Pose Data"
+    ,"advanced.title": "Advanced Model Settings"
+    ,"advanced.hide": "Hide settings"
+    ,"advanced.show": "Show advanced settings"
+    ,"advanced.temperature": "Temperature"
+    ,"advanced.contextWindow": "Context window"
+    ,"advanced.systemPrompt": "System prompt"
+    ,"advanced.seed": "Seed"
+    ,"advanced.maxTokens": "Max tokens"
+    ,"advanced.topP": "Top-p"
+    ,"advanced.presencePenalty": "Presence penalty"
+    ,"advanced.frequencyPenalty": "Frequency penalty"
+    ,"advanced.openSystem": "Open system window"
+}

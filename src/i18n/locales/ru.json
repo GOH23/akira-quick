@@ -1,0 +1,37 @@
+{
+  "tabs.videoToAnimation": "Видео → Анимация",
+  "tabs.textToAnimation": "Текст → Анимация",
+  "tabs.textToPose": "Текст → Поза",
+  "video.title.processing": "Автоматическая обработка видео в MMD-анимацию",
+  "video.title.idle": "Процессор видео → MMD-анимация",
+  "video.description.processing": "Видео воспроизводятся и обрабатываются автоматически",
+  "video.description.idle": "Загрузите видео для автоматической обработки в анимацию",
+  "button.selectVideos": "Выбрать видео",
+  "button.start": "Начать",
+  "download.animations": "Скачать анимации",
+  "modal.title": "Анимация готова!",
+  "modal.description": "Ваша анимация успешно сгенерирована. Перед загрузкой поддержите проект!"
+  ,"think.header": "рассуждаю"
+  ,"think.hide": "Скрыть"
+  ,"think.show": "Показать"
+  ,"textToPose.title": "Генератор поз для MMD из текста"
+  ,"textToPose.placeholder": "Опишите позу, которую вы хотите сгенерировать... Например: Персонаж стоит в уверенной позе с руками на бедрах"
+  ,"button.generate": "Сгенерировать позу"
+  ,"button.generating": "Генерация..."
+  ,"status.loadingModel": "Загрузка модели..."
+  ,"status.modelReady": "готово"
+  ,"status.modelLoading": "загрузка"
+  ,"result.heading": "Сгенерированные данные позы"
+  ,"advanced.title": "Тонкая настройка модели"
+  ,"advanced.hide": "Скрыть настройки"
+  ,"advanced.show": "Показать настройки"
+  ,"advanced.temperature": "Температура"
+  ,"advanced.contextWindow": "Окно контекста"
+  ,"advanced.systemPrompt": "System prompt"
+  ,"advanced.seed": "Seed (затравка)"
+  ,"advanced.maxTokens": "Максимум токенов"
+  ,"advanced.topP": "Top-p"
+  ,"advanced.presencePenalty": "Штраф за присутствие"
+  ,"advanced.frequencyPenalty": "Штраф за частоту"
+  ,"advanced.openSystem": "Открыть системное окно"
+}

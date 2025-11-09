@@ -1,9 +1,9 @@
 {
   "name": "akira-quick",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack",
+    "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "eslint"
@@ -12,8 +12,12 @@
     "@babylonjs/core": "^8.11.0",
     "@mediapipe/camera_utils": "^0.3.1675466862",
     "@mediapipe/drawing_utils": "^0.3.1675466124",
+    "@mediapipe/hands": "^0.4.1675469240",
     "@mediapipe/holistic": "^0.5.1675471629",
+    "@mediapipe/tasks-genai": "^0.10.25",
     "@mediapipe/tasks-vision": "^0.10.22-rc.20250304",
+    "@mlc-ai/web-llm": "^0.2.79",
+    "@techstark/opencv-js": "^4.11.0-release.1",
     "babylon-mmd": "^0.68.0",
     "encoding-japanese": "^2.2.0",
     "framer-motion": "^12.23.12",
@@ -24,7 +28,11 @@
     "next": "15.5.0",
     "react": "19.1.0",
     "react-dom": "19.1.0",
-    "react-icons": "^5.5.0"
+    "react-icons": "^5.5.0",
+    "shiftjis": "^1.0.0",
+  "vmd.js": "^1.0.2",
+  "react-markdown": "^8.0.5",
+  "rehype-raw": "^6.1.1"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
