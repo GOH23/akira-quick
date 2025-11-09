@@ -1,9 +1,8 @@
 "use client"
 
 import * as webllm from "@mlc-ai/web-llm";
-import { useEffect, useState, useRef } from "react";
-import ReactMarkdown from 'react-markdown'
-import rehypeRaw from 'rehype-raw'
+import { useEffect, useState, useRef, useMemo } from "react";
+// Load markdown-it dynamically to avoid bundler resolution issues in the dev server
 import { useTranslation } from '../../../i18n/LocaleProvider'
 
 export function TextToPose() {
@@ -15,6 +14,22 @@ export function TextToPose() {
     const [isStreaming, setIsStreaming] = useState(false);
     const [thinkVisible, setThinkVisible] = useState(true);
     const translate = useTranslation();
+    const [md, setMd] = useState<any>(null);
+
+    // Dynamically import markdown-it on the client to avoid module resolution errors
+    useEffect(() => {
+        let mounted = true;
+        import('markdown-it')
+            .then((mod) => {
+                if (!mounted) return;
+                const MarkdownIt = mod && (mod.default ?? mod);
+                setMd(new MarkdownIt({ html: true }));
+            })
+            .catch((err) => {
+                console.warn('Failed to load markdown-it dynamically:', err);
+            });
+        return () => { mounted = false; };
+    }, []);
 
     // Advanced model settings
     const [advancedOpen, setAdvancedOpen] = useState(false);
@@ -363,7 +378,11 @@ neck reset;
                                             </button>
                                         </div>
                                     )}
-                                    <ReactMarkdown rehypePlugins={[rehypeRaw]}>{transformThinkTags(streamingText, thinkVisible)}</ReactMarkdown>
+                                    {md ? (
+                                        <div dangerouslySetInnerHTML={{ __html: md.render(transformThinkTags(streamingText, thinkVisible)) }} />
+                                    ) : (
+                                        <pre className="whitespace-pre-wrap">{transformThinkTags(streamingText, thinkVisible).replace(/<[^>]+>/g, '')}</pre>
+                                    )}
                                 </div>
                             </div>
                         )}
@@ -382,7 +401,11 @@ neck reset;
                                             </button>
                                         </div>
                                     )}
-                                    <ReactMarkdown rehypePlugins={[rehypeRaw]}>{transformThinkTags(result, thinkVisible)}</ReactMarkdown>
+                                    {md ? (
+                                        <div dangerouslySetInnerHTML={{ __html: md.render(transformThinkTags(result, thinkVisible)) }} />
+                                    ) : (
+                                        <pre className="whitespace-pre-wrap">{transformThinkTags(result, thinkVisible).replace(/<[^>]+>/g, '')}</pre>
+                                    )}
                                 </div>
                             </div>
                         )}
